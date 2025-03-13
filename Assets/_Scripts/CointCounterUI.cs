@@ -1,3 +1,4 @@
+using System.Collections;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -21,9 +22,18 @@ public class CointCounterUI : MonoBehaviour
         moveAmount = current.rectTransform.rect.height;
     }
 
+    private IEnumerator ResetCoinContainer(int score) 
+    {
+        yield return new WaitForSeconds(duration);
+        current.SetText($"{score}");
+        Vector3 localPosition = coinTextContainer.localPosition;
+        coinTextContainer.localPosition = new Vector3(localPosition.x, containerInitPosition, localPosition.z);
+    }
+
     public void UpdateScore(int score) 
     {
         toUpdate.SetText($"{score}");
         coinTextContainer.DOLocalMoveY(containerInitPosition + moveAmount, duration);
+        StartCoroutine(ResetCoinContainer(score));
     }
 }
